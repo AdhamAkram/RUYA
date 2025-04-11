@@ -1,8 +1,8 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
+"use strict";
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable("Users", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       role: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING  // If you prefer an ENUM, change this to: Sequelize.ENUM("blind_user", "caregiver")
       },
       createdAt: {
         allowNull: false,
@@ -28,7 +28,8 @@ module.exports = {
       }
     });
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable("Users");
   }
 };
