@@ -14,7 +14,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log("Server running on port 5000");
   });
   
-app.use("/api/device", require("./routes/deviceRoutes"));
-app.use("/api/user", require("./routes/userRoutes"));
+// app.use("/api/device", require("./routes/deviceRoutes"));
+// app.use("/api/user", require("./routes/userRoutes"));
 // app.use('/api/sos', require("./routes/sosRoutes"));
 app.use("/api/stream", require("./routes/streamRoutes"));
