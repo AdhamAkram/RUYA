@@ -1,25 +1,25 @@
 const Device = require("../models/Device");
 
-// Test database connection
-exports.testDbConnection = async (req, res) => {
-  try {
-    // Fetch all users to test the database connection
-    const users = await User.findAll();
-    res.json({ message: "Database connection successful", users });
-  } catch (error) {
-    res.status(500).json({ error: "Database connection failed", details: error.message });
-  }
-};
+// // Test database connection
+// exports.testDbConnection = async (req, res) => {
+//   try {
+//     // Fetch all users to test the database connection
+//     const users = await User.findAll();
+//     res.json({ message: "Database connection successful", users });
+//   } catch (error) {
+//     res.status(500).json({ error: "Database connection failed", details: error.message });
+//   }
+// };
 
-exports.validateDevice = async (req, res) => {
-  try {
-    const device = await Device.findByPk(req.params.deviceId);
-    if (!device) return res.status(404).json({ error: "Device not found" });
-    res.json({ deviceId: device.deviceId, paired: !!device.pairedWith });
-  } catch (error) {
-    res.status(500).json({ error: "Server error" });
-  }
-};
+// exports.validateDevice = async (req, res) => {
+//   try {
+//     const device = await Device.findByPk(req.params.deviceId);
+//     if (!device) return res.status(404).json({ error: "Device not found" });
+//     res.json({ deviceId: device.deviceId, paired: !!device.pairedWith });
+//   } catch (error) {
+//     res.status(500).json({ error: "Server error" });
+//   }
+// };
 
 exports.pairDevice = async (req, res) => {
   try {
@@ -53,7 +53,9 @@ exports.getDevice = async (req, res) => {
 
   exports.listDevices = async (req, res) => {
     try {
+      console.log("Fetching devices from the database...");
       const devices = await Device.findAll();
+      console.log("Devices fetched successfully:", devices);
       res.json({ devices });
     } catch (error) {
       console.error("Error listing devices:", error);
