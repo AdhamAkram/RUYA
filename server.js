@@ -19,23 +19,20 @@
 // // app.use('/api/sos', require("./routes/sosRoutes"));
 // app.use("/api/stream", require("./routes/streamRoutes"));
 // server.js - No authentication version
+// server.js
 const NodeMediaServer = require('node-media-server');
 
 const config = {
   rtmp: {
-    port: 1935,
+    port: process.env.RTMP_PORT || 1935,
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
     ping_timeout: 60
   },
   http: {
-    port: 8000,
+    port: process.env.PORT || 3000,
     allow_origin: '*'
-  },
-  auth: {
-    publish: false,  // Disable publish authentication
-    play: false     // Disable play authentication
   }
 };
 
