@@ -15,5 +15,5 @@ app.use("/api/stream", require("./routes/streamRoutes"));  // Add this line
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-app.use("/api/device", require("./routes/deviceRoutes"));
-app.use("/api/user", require("./routes/userRoutes"));
+// app.use("/api/device", require("./routes/deviceRoutes"));
+// app.use("/api/user", require("./routes/userRoutes"));
