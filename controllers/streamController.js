@@ -1,4 +1,6 @@
 const fs = require('fs');
+console.log("Private key length:", process.env.SSH_PRIVATE_KEY?.length);
+
 const { exec } = require('child_process');
 
 const privateKey = process.env.SSH_PRIVATE_KEY;
