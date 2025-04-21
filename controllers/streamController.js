@@ -1,12 +1,14 @@
 const { exec } = require("child_process");
 
+const password = "admin";  // Replace with the password for the Raspberry Pi
+
 exports.startStream = (req, res) => {
   // Use the static IP of your Raspberry Pi for the streaming script execution
   const staticPiIP = '192.168.1.12';  // Replace with your Pi's static IP
   const scriptPath = `/home/adham/stream.sh`;  // Path to the stream.sh file on the Pi
 
-  // Execute the stream.sh script using SSH to the Raspberry Pi (assuming you have SSH access set up)
-  const command = `ssh pi@${staticPiIP} "bash ${scriptPath}"`;  // SSH into the Pi and execute the script
+  // Execute the stream.sh script using SSH and password with sshpass
+  const command = `sshpass -p ${password} ssh pi@${staticPiIP} "bash ${scriptPath}"`;  // SSH into the Pi and execute the script
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
@@ -27,7 +29,7 @@ exports.startStream = (req, res) => {
 exports.stopStream = (req, res) => {
   // Use SSH to stop the stream on the Raspberry Pi
   const staticPiIP = '192.168.1.12';  // Replace with your Pi's static IP
-  const stopCommand = `ssh pi@${staticPiIP} "sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg && sleep 2"`;  // SSH command to stop the streaming
+  const stopCommand = `sshpass -p ${password} ssh pi@${staticPiIP} "sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg && sleep 2"`;  // SSH command to stop the streaming
 
   exec(stopCommand, (error, stdout, stderr) => {
     if (error) {
