@@ -17,6 +17,7 @@
     "googleapis": "^148.0.0",
     "morgan": "^1.10.0",
     "node-media-server": "^2.4.9",
+    "node-ssh": "^13.2.1",
     "pg": "^8.14.0",
     "sequelize": "^6.37.6",
     "sequelize-cli": "^6.6.2",
