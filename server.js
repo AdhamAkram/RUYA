@@ -2,31 +2,23 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const { exec } = require("child_process");
+
 const app = express();
 app.use(cors());
 app.use(morgan("dev"));
-app.use(express.json()); // Parse JSON body
-// Check if SSH is available
-exec("ssh -V", (error, stdout, stderr) => {
-    console.log("stdout:", stdout);
-    console.log("stderr:", stderr);
-    if (error) {
-      console.error("SSH not available:", error);
-    } else {
-      console.log("SSH is available and working.");
-    }
-  });
-  
-  app.get("/", (req, res) => {
-    res.send("Hello from Railway!");
-  });
-const PORT = process.env.PORT || 3000;
+app.use(express.json());
 
-// Use the stream routes
-app.use("/api/stream", require("./routes/streamRoutes"));  // Add this line
+// Optional: Test route
+app.get("/", (req, res) => {
+  res.send("Hello from Railway!");
+});
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Stream routes
+app.use("/api/stream", require("./routes/streamRoutes"));
 
+// Uncomment these when your other routes are ready
 // app.use("/api/device", require("./routes/deviceRoutes"));
 // app.use("/api/user", require("./routes/userRoutes"));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
