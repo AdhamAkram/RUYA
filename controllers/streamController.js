@@ -23,7 +23,7 @@ const piUser = 'adham';
 exports.startStream = (req, res) => {
   try {
     const keyPath = writePrivateKey();
-    const command = `ssh -i ${keyPath} ${piUser}@${piIP} "bash /home/pi/stream.sh"`;
+    const command = `ssh -i ${keyPath} ${piUser}@${piIP} "bash /home/adham/stream.sh"`;
 
     exec(command, (error, stdout, stderr) => {
       if (error) {
