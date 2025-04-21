@@ -1,8 +1,9 @@
-const express = require("express");
+// routes/streamRoutes.js
+const express = require('express');
 const router = express.Router();
-const { setStreamStatus, getStreamStatus } = require("../controllers/streamController");
+const streamController = require('../controllers/streamController');
 
-router.post("/set-stream", setStreamStatus);
-router.get("/get-stream", getStreamStatus);
+// Route to start the stream
+router.post('/start', streamController.startStream);
 
 module.exports = router;
