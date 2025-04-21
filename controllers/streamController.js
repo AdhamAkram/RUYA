@@ -15,7 +15,9 @@ exports.startStream = (req, res) => {
   fs.writeFileSync(privateKeyPath, privateKey, { mode: 0o600 });
 
   const staticPiIP = '192.168.1.12'; // Raspberry Pi IP
-  const command = `ssh -i ${privateKeyPath} adham@${staticPiIP} "bash /home/pi/stream.sh"`;
+  const password = 'admin';  // Set the password to 'admin'
+
+  const command = `sshpass -p '${password}' ssh -i ${privateKeyPath} adham@${staticPiIP} "bash /home/pi/stream.sh"`;
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
@@ -45,7 +47,9 @@ exports.stopStream = (req, res) => {
   fs.writeFileSync(privateKeyPath, privateKey, { mode: 0o600 });
 
   const staticPiIP = '192.168.1.12'; // Raspberry Pi IP
-  const command = `ssh -i ${privateKeyPath} adham@${staticPiIP} "sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg"`;
+  const password = 'admin';  // Set the password to 'admin'
+
+  const command = `sshpass -p '${password}' ssh -i ${privateKeyPath} adham@${staticPiIP} "sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg"`;
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
