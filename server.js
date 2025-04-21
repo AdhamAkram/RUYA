@@ -8,7 +8,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json()); // Parse JSON body
 
-const PORT = process.env.PORT || 1935;
+const PORT = process.env.PORT;
 
 // Use the stream routes
 app.use("/api/stream", require("./routes/streamRoutes"));  // Add this line
