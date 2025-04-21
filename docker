@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Run your app
-CMD [ "node", "index.js" ]  # or change to "app.js" or "server.js" depending on your entry point
+CMD [ "node", "server.js" ] 
