@@ -8,7 +8,24 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json()); // Parse JSON body
 
-const PORT = process.env.PORT || 3000;
+
+exec("ssh -V", (error, stdout, stderr) => {
+  console.log("stdout:", stdout);
+  console.log("stderr:", stderr);
+  if (error) {
+    console.error("SSH not available:", error);
+  } else {
+    console.log("SSH is available and working.");
+  }
+});
+
+app.get("/", (req, res) => {
+  res.send("Hello from Railway!");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // Use the stream routes
 app.use("/api/stream", require("./routes/streamRoutes"));  // Add this line
