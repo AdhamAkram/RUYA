@@ -1,48 +1,25 @@
-const { spawn } = require("child_process");
+const fs = require('fs');
+const { exec } = require('child_process');
 
-const password = "admin";  // Replace with the password for the Raspberry Pi
+const privateKey = process.env.SSH_PRIVATE_KEY;
+const privateKeyPath = '/tmp/id_rsa';
 
-exports.startStream = (req, res) => {
-  const staticPiIP = '192.168.1.12';  // Replace with your Pi's static IP
-  const scriptPath = `/home/adham/stream.sh`;  // Path to the stream.sh file on the Pi
+// Write the private key to a file in the container
+fs.writeFileSync(privateKeyPath, privateKey, { mode: 0o600 });
 
-  // Execute the stream.sh script using SSH and password with sshpass
-  const command = spawn("sshpass", ["-p", password, "ssh", `pi@${staticPiIP}`, `bash ${scriptPath}`]);
+const staticPiIP = '192.168.1.12'; // Raspberry Pi IP
 
-  command.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-  });
+const command = `ssh -i ${privateKeyPath} pi@${staticPiIP} "bash /home/pi/stream.sh"`;
 
-  command.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
-
-  command.on("close", (code) => {
-    if (code === 0) {
-      return res.status(200).json({ message: "Streaming started successfully!" });
-    } else {
-      return res.status(500).json({ message: `Stream start failed with exit code ${code}` });
-    }
-  });
-};
-
-exports.stopStream = (req, res) => {
-  const staticPiIP = '192.168.1.12';  // Replace with your Pi's static IP
-  const stopCommand = spawn("sshpass", ["-p", password, "ssh", `pi@${staticPiIP}`, "sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg && sleep 2"]);
-
-  stopCommand.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
-  stopCommand.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
-
-  stopCommand.on("close", (code) => {
-    if (code === 0) {
-      return res.status(200).json({ message: "Streaming stopped successfully!" });
-    } else {
-      return res.status(500).json({ message: `Stream stop failed with exit code ${code}` });
-    }
-  });
-};
+exec(command, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return res.status(500).json({ message: `Command failed: ${error.message}` });
+  }
+  if (stderr) {
+    console.error(`stderr: ${stderr}`);
+    return res.status(500).json({ message: `Command failed: ${stderr}` });
+  }
+  console.log(`stdout: ${stdout}`);
+  return res.status(200).json({ message: "Streaming started successfully!" });
+});
