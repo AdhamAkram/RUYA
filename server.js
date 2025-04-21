@@ -3,7 +3,7 @@ const NodeMediaServer = require('node-media-server');
 
 const config = {
   rtmp: {
-    port: process.env.RTMP_PORT,
+    port: process.env.RTMP_PORT || 1935,
     chunk_size: 4096,
     publish_validator: (sessionId, streamPath, streamKey) => {
       return streamKey === "stream"; // Only check stream key
