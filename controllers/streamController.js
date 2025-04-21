@@ -1,17 +1,21 @@
 const fs = require('fs');
 const { exec } = require('child_process');
-
+const privateKeyPath = '/tmp/id_rsa';
 const writePrivateKey = () => {
   const privateKey = process.env.SSH_PRIVATE_KEY?.replace(/\\n/g, '\n');
-  const privateKeyPath = '/tmp/id_rsa';
+
+  console.log('Private Key:', privateKey);
 
   if (!privateKey) {
     throw new Error('SSH private key is missing.');
   }
 
   fs.writeFileSync(privateKeyPath, privateKey, { mode: 0o600 });
+  console.log(`Written Private Key to ${privateKeyPath}`);
+
   return privateKeyPath;
 };
+
 
 const piIP = '192.168.1.12';
 const piUser = 'adham';
