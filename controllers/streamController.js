@@ -2,7 +2,7 @@ const { exec } = require("child_process");
 
 exports.startStream = (req, res) => {
   // Path to your stream.sh file
-  const scriptPath = "./home/adham/stream.sh";  // Adjust the path as necessary
+  const scriptPath = "/home/adham/stream.sh";  // Adjust the path as necessary
 
   exec(scriptPath, (error, stdout, stderr) => {
     if (error) {
