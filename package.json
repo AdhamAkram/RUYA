@@ -21,6 +21,7 @@
     "pg": "^8.14.0",
     "sequelize": "^6.37.6",
     "sequelize-cli": "^6.6.2",
-    "simple-peer": "^9.11.1"
+    "simple-peer": "^9.11.1",
+    "ssh2": "^1.16.0"
   }
 }
