@@ -1,10 +1,14 @@
 const { exec } = require("child_process");
 
 exports.startStream = (req, res) => {
-  // Path to your stream.sh file
-  const scriptPath = "/home/adham/stream.sh";  // Adjust the path as necessary
+  // Use the static IP of your Raspberry Pi for the streaming script execution
+  const staticPiIP = '192.168.1.12';  // Replace with your Pi's static IP
+  const scriptPath = `/home/adham/stream.sh`;  // Path to the stream.sh file on the Pi
 
-  exec(scriptPath, (error, stdout, stderr) => {
+  // Execute the stream.sh script using SSH to the Raspberry Pi (assuming you have SSH access set up)
+  const command = `ssh pi@${staticPiIP} "bash ${scriptPath}"`;  // SSH into the Pi and execute the script
+
+  exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return res.status(500).json({ message: `Stream start failed: ${error.message}` });
@@ -19,9 +23,13 @@ exports.startStream = (req, res) => {
     return res.status(200).json({ message: "Streaming started successfully!" });
   });
 };
+
 exports.stopStream = (req, res) => {
-  // Execute the pkill commands to stop libcamera-vid and ffmpeg
-  exec("sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg && sleep 2", (error, stdout, stderr) => {
+  // Use SSH to stop the stream on the Raspberry Pi
+  const staticPiIP = '192.168.1.12';  // Replace with your Pi's static IP
+  const stopCommand = `ssh pi@${staticPiIP} "sudo pkill -9 libcamera-vid && sudo pkill -9 ffmpeg && sleep 2"`;  // SSH command to stop the streaming
+
+  exec(stopCommand, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return res.status(500).json({ message: `Stream stop failed: ${error.message}` });
