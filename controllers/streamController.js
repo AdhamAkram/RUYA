@@ -4,7 +4,7 @@ const { exec } = require('child_process');
 exports.startStream = (req, res) => {
   console.log("Private key length:", process.env.SSH_PRIVATE_KEY?.length);
 
-  const privateKey = process.env.SSH_PRIVATE_KEY;
+  const privateKey = process.env.SSH_PRIVATE_KEY?.replace(/\\n/g, '\n');
   const privateKeyPath = '/tmp/id_rsa';
 
   if (!privateKey) {
