@@ -1,9 +1,8 @@
-// routes/streamRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const streamController = require('../controllers/streamController');
+const { setStreamStatus, getStreamStatus } = require("../controllers/streamController");
 
-// Route to start the stream
-router.post('/start', streamController.startStream);
-// router.post('/stop', streamController.stopStream);
+router.post("/set-stream", setStreamStatus);   // To start/stop stream
+router.get("/get-stream", getStreamStatus);    // Pi will poll this
+
 module.exports = router;
