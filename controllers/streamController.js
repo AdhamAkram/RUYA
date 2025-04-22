@@ -134,3 +134,8 @@ exports.setStreamStatus = (req, res) => {
 exports.getStreamStatus = (req, res) => {
   res.status(200).json({ active: streamActive });
 };
+
+exports.stopStream = (req, res) => {
+  streamActive = false;
+  res.status(200).json({ message: "Stream stopped via stop-stream endpoint" });
+};
