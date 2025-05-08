@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
 // Stream routes
 app.use("/api/stream", require("./routes/streamRoutes"));
 app.use("/api/status", require("./routes/statusRoutes"));
+app.use("/api/sos", require("./routes/sosRoutes"));
 
 // Uncomment these when your other routes are ready
 // app.use("/api/device", require("./routes/deviceRoutes"));

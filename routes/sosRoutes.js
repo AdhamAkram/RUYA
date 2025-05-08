@@ -1,8 +1,9 @@
-// const express = require('express');
-// const router = express.Router();
-// const sosController = require('../controllers/sosController');
+const express = require('express');
+const router = express.Router();
+const sosController = require('../controllers/sosController');
 
-// // Route to trigger an SOS emergency
-// router.post('/trigger', sosController.triggerSOS);
+router.post('/trigger-sos', sosController.triggerSOS);
+router.get('/sos-status', sosController.getSOSStatus);
+router.post('/clear-sos', sosController.clearSOS);
 
-// module.exports = router;
+module.exports = router;

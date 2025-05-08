@@ -1,28 +1,24 @@
-// const sosAlerts = []; // Temporary storage for SOS alerts
+let sosActive = {};
 
-// exports.triggerSOS = (req, res) => {
-//     const { deviceId, userId } = req.body;
+exports.triggerSOS = (req, res) => {
+  const { deviceId } = req.body;
+  if (!deviceId) return res.status(400).json({ message: "Missing deviceId" });
 
-//     if (!deviceId || !userId) {
-//         return res.status(400).json({ message: "Missing required fields" });
-//     }
+  sosActive[deviceId] = true;
+  console.log(`🚨 SOS triggered for ${deviceId}`);
+  res.json({ message: "SOS triggered" });
+};
 
-//     const sosAlert = {
-//         sosId: sosAlerts.length + 1,
-//         deviceId,
-//         userId,
-//         timestamp: new Date().toISOString(),
-//         status: "active"
-//     };
+exports.getSOSStatus = (req, res) => {
+  const { deviceId } = req.query;
+  if (!deviceId) return res.status(400).json({ message: "Missing deviceId" });
 
-//     sosAlerts.push(sosAlert);
+  const active = sosActive[deviceId] || false;
+  res.json({ sos: active });
+};
 
-//     // Simulate sending SOS alert (e.g., notify emergency contacts)
-//     console.log(`🚨 SOS triggered by user ${userId} from device ${deviceId}`);
-
-//     res.status(200).json({
-//         message: "SOS alert triggered successfully",
-//         status: "active",
-//         sosId: sosAlert.sosId
-//     });
-// };
+exports.clearSOS = (req, res) => {
+  const { deviceId } = req.body;
+  sosActive[deviceId] = false;
+  res.json({ message: "SOS cleared" });
+};
