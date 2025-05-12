@@ -44,7 +44,7 @@ exports.setStreamStatus = (req, res) => {
 
 exports.getStreamUrl = (req, res) => {
   const { deviceId } = req.query;
-  const baseUrl = "rtmp://trolley.proxy.rlwy.net:24127/strean"; // your base RTMP
+  const baseUrl = "rtmp://trolley.proxy.rlwy.net:24127/stream"; // your base RTMP
 
   const streamData = global.currentStreams?.[deviceId];
 
