@@ -1,21 +1,31 @@
 let streamActive = false;
 const crypto = require('crypto');
 
-// exports.setStreamStatus = (req, res) => {
-//   // Default to true if no body or no active field
-//   const active = typeof req.body.active === 'boolean' ? req.body.active : true;
-
-//   streamActive = active;
-//   res.status(200).json({ message: `Stream ${active ? 'started' : 'stopped'}` });
-// };
+// Unified stream status tracking
+global.currentStreams = global.currentStreams || {};
 
 exports.getStreamStatus = (req, res) => {
-  res.status(200).json({ active: streamActive });
+  // Check both the global flag and specific device streams
+  const active = streamActive || Object.keys(global.currentStreams).length > 0;
+  res.status(200).json({ active });
 };
 
 exports.stopStream = (req, res) => {
+  const deviceId = req.body.deviceId;
+  
+  if (deviceId) {
+    // Stop specific device stream
+    if (global.currentStreams[deviceId]) {
+      delete global.currentStreams[deviceId];
+      return res.status(200).json({ message: `Stream stopped for device ${deviceId}` });
+    }
+    return res.status(404).json({ message: "No active stream for this device" });
+  }
+  
+  // Stop all streams if no device specified
   streamActive = false;
-  res.status(200).json({ message: "Stream stopped via stop-stream endpoint" });
+  global.currentStreams = {};
+  res.status(200).json({ message: "All streams stopped" });
 };
 
 exports.setStreamStatus = (req, res) => {
@@ -25,30 +35,37 @@ exports.setStreamStatus = (req, res) => {
   if (!deviceId) return res.status(400).json({ message: "Missing deviceId" });
 
   if (active) {
-    // Generate unique stream key
     const streamKey = crypto.randomBytes(8).toString('hex');
-    // Save this to a map or in-memory store
-    global.currentStreams = global.currentStreams || {};
     global.currentStreams[deviceId] = {
       streamKey,
-      expiresAt: Date.now() + 10 * 60 * 1000 // valid for 10 minutes
+      expiresAt: Date.now() + 10 * 60 * 1000 // 10 minutes
     };
-    console.log("🔐 Generated stream key:", streamKey);
+    streamActive = true;
     return res.json({ streamKey });
   }
 
-  // Clear stream key
-  if (global.currentStreams) delete global.currentStreams[deviceId];
-  return res.json({ message: "Stream stopped" });
+  // Stopping specific stream
+  if (global.currentStreams[deviceId]) {
+    delete global.currentStreams[deviceId];
+    // Update global status if no streams left
+    if (Object.keys(global.currentStreams).length === 0) {
+      streamActive = false;
+    }
+    return res.json({ message: "Stream stopped" });
+  }
+  
+  return res.status(404).json({ message: "No active stream for this device" });
 };
 
 exports.getStreamUrl = (req, res) => {
   const { deviceId } = req.query;
-  const baseUrl = "rtmp://trolley.proxy.rlwy.net:24127/stream"; // your base RTMP
+  const baseUrl = "rtmp://trolley.proxy.rlwy.net:24127/stream";
 
   const streamData = global.currentStreams?.[deviceId];
 
   if (!streamData || Date.now() > streamData.expiresAt) {
+    // Auto-clean expired streams
+    if (streamData) delete global.currentStreams[deviceId];
     return res.status(404).json({ message: "No active stream or expired" });
   }
 
